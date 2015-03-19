@@ -1,5 +1,25 @@
 // See: http://24ways.org/2013/grunt-is-not-weird-and-hard/
 module.exports = function(grunt) {
+    
+    var filesToArchive = [
+        'build/**',
+        'css/**',
+        'bower_components/**',
+        'fonts/**',
+        'images/**',
+        'includes/**',
+        'js/**',
+        'sass/**',
+        'Gruntfile.js',
+        'package.json',
+        'bower.json',        
+        'functions.php',        
+        'page_custom.php',        
+        'README.md',
+        'style.css',
+        '*.ico',
+        '*.png'
+    ]
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
@@ -159,7 +179,23 @@ module.exports = function(grunt) {
 					spawn: false
 				}
 			}
-		}
+		},
+        
+        // make a zipfile
+        compress: {
+            main: {
+                options: {
+                    mode: 'zip',
+                    archive: 'genesis-bfg.zip',
+                    pretty: true
+                },
+                files: [{
+                    expand: true,
+                    src: filesToArchive,
+                    dest: '/'
+                }]
+            }
+        }      
 
 	});
 
@@ -176,6 +212,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-imagemin');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-notify');
+    grunt.loadNpmTasks('grunt-contrib-compress');
 
 	grunt.registerTask('default', ['clean', 'sass', 'grunticon', 'concat', 'imagemin', 'watch']);
 	grunt.registerTask('build', ['clean', 'csscomb', 'sass', 'grunticon', 'jshint', 'concat', 'uglify', 'imagemin', 'autoprefixer', 'csso']);
